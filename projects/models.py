@@ -32,10 +32,12 @@ class Project(models.Model):
 
 
 class Contributor(models.Model):
+    
     ROLE_CHOICES = [
         ("AUTHOR", "Author"),
         ("CONTRIBUTOR", "Contributor"),
     ]
+
     PERMISSION_CHOICES = [
         ("READ", "Read"),
         ("WRITE", "Write"),
@@ -56,13 +58,14 @@ class Contributor(models.Model):
         max_length=20,
         choices=PERMISSION_CHOICES
     )
-class Meta:
-            constraints = [
+    
+    class Meta:
+        constraints = [
             models.UniqueConstraint(
                 fields=["user", "project"],
                 name="unique_contributor_per_project"
             )
         ]
-    
+
     def __str__(self):
         return f"{self.user.username} - {self.project.title}"
