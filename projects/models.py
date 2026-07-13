@@ -21,7 +21,7 @@ class Project(models.Model):
     )
     author_user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT,
     )
     created_time = models.DateTimeField(
         auto_now_add=True
@@ -42,7 +42,7 @@ class Contributor(models.Model):
     ]
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     project = models.ForeignKey(
         Project,
@@ -56,6 +56,13 @@ class Contributor(models.Model):
         max_length=20,
         choices=PERMISSION_CHOICES
     )
+class Meta:
+            constraints = [
+            models.UniqueConstraint(
+                fields=["user", "project"],
+                name="unique_contributor_per_project"
+            )
+        ]
     
     def __str__(self):
         return f"{self.user.username} - {self.project.title}"
