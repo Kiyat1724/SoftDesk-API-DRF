@@ -8,7 +8,8 @@ class Comment(models.Model):
     description = models.TextField()
     author_user = models.ForeignKey(
         User,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        related_name="created_comments"
     )
     issue = models.ForeignKey(
         Issue,

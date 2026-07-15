@@ -61,7 +61,7 @@ class Issue(models.Model):
         on_delete=models.PROTECT,
         related_name="assigned_issues"
     )
-
+    
     created_time = models.DateTimeField(
         auto_now_add=True
     )

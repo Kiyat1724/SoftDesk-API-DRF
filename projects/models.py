@@ -22,6 +22,7 @@ class Project(models.Model):
     author_user = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
+        related_name="created_projects"
     )
     created_time = models.DateTimeField(
         auto_now_add=True
@@ -44,11 +45,13 @@ class Contributor(models.Model):
     ]
     user = models.ForeignKey(
         User,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        related_name="contributions"
     )
     project = models.ForeignKey(
         Project,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="contributors"
     )
     role = models.CharField(
         max_length=20,
