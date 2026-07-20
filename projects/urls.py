@@ -3,7 +3,15 @@ from .views import ProjectViewSet, ContributorViewSet
 
 router = DefaultRouter()
 
-router.register(r'projects', ProjectViewSet)
-router.register(r'contributors', ContributorViewSet)
+router.register(
+    r'projects',
+    ProjectViewSet,
+    basename='project'
+)
 
+router.register(
+    r'contributors',
+    ContributorViewSet,
+    basename='contributor'
+)
 urlpatterns = router.urls

@@ -3,6 +3,10 @@ from .views import IssueViewSet
 
 router = DefaultRouter()
 
-router.register(r'issues', IssueViewSet)
+router.register(
+    r'issues',
+    IssueViewSet,
+    basename='issue'
+)
 
 urlpatterns = router.urls
