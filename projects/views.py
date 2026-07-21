@@ -3,16 +3,24 @@ from rest_framework.viewsets import ModelViewSet
 
 from .models import Project, Contributor
 from .permissions import IsProjectAuthorOrReadOnly
-from .serializers import ProjectSerializer, ContributorSerializer
+from .serializers import (
+    ProjectListSerializer,
+    ProjectDetailSerializer,
+    ContributorSerializer,
+)
 
 
 class ProjectViewSet(ModelViewSet):
-
-    serializer_class = ProjectSerializer
+   
     permission_classes = [
         IsAuthenticated,
         IsProjectAuthorOrReadOnly,
     ]
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ProjectListSerializer
+        return ProjectDetailSerializer
 
     def get_queryset(self):
         return Project.objects.filter(
@@ -20,7 +28,16 @@ class ProjectViewSet(ModelViewSet):
         ).distinct()
 
     def perform_create(self, serializer):
-        serializer.save(author_user=self.request.user)
+        project = serializer.save(
+            author_user=self.request.user
+        )
+
+        Contributor.objects.create(
+            user=self.request.user,
+            project=project,
+            role="AUTHOR",
+            permission="WRITE",
+        )
 
 
 class ContributorViewSet(ModelViewSet):
