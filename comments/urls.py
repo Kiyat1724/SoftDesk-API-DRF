@@ -1,12 +1,14 @@
-from rest_framework.routers import DefaultRouter
+from django.urls import path, include
+
+from issues.urls import issues_router
 from .views import CommentViewSet
 
-router = DefaultRouter()
-
-router.register(
+issues_router.register(
     r'comments',
     CommentViewSet,
-    basename='comment'
+    basename='issue-comments'
 )
 
-urlpatterns = router.urls
+urlpatterns = [
+    path("", include(issues_router.urls)),
+]

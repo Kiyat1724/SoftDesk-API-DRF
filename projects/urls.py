@@ -1,3 +1,4 @@
+from rest_framework_nested import routers
 from rest_framework.routers import DefaultRouter
 from .views import ProjectViewSet, ContributorViewSet
 
@@ -14,4 +15,14 @@ router.register(
     ContributorViewSet,
     basename='contributor'
 )
-urlpatterns = router.urls
+
+projects_router = routers.NestedDefaultRouter(
+    router,
+    r'projects',
+    lookup='project'
+)
+
+urlpatterns = (
+    router.urls +
+    projects_router.urls
+)

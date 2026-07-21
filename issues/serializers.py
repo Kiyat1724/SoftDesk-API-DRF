@@ -7,4 +7,4 @@ class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
         fields = "__all__"
-        read_only_fields = ["author_user", "created_time"]
+        read_only_fields = ["author_user", "created_time", "project"]
