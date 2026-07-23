@@ -1,8 +1,12 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
+from issues.models import Issue
 from .models import Comment
-from .serializers import CommentSerializer
+from .serializers import (
+    CommentListSerializer,
+    CommentDetailSerializer,
+)
 from .permissions import (
     IsIssueContributor,
     IsCommentAuthorOrReadOnly,
@@ -10,13 +14,16 @@ from .permissions import (
 
 
 class CommentViewSet(ModelViewSet):
-
-    serializer_class = CommentSerializer
     permission_classes = [
         IsAuthenticated,
         IsIssueContributor,
         IsCommentAuthorOrReadOnly,
     ]
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return CommentListSerializer
+        return CommentDetailSerializer
 
     def get_queryset(self):
         return Comment.objects.filter(
@@ -25,7 +32,10 @@ class CommentViewSet(ModelViewSet):
         ).distinct()
 
     def perform_create(self, serializer):
+        issue = Issue.objects.get(
+            pk=self.kwargs["issue_pk"]
+        )
         serializer.save(
             author_user=self.request.user,
-            issue_id=self.kwargs["issue_pk"],
+            issue=issue,
         )

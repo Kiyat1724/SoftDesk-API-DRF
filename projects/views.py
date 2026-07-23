@@ -31,7 +31,6 @@ class ProjectViewSet(ModelViewSet):
         project = serializer.save(
             author_user=self.request.user
         )
-
         Contributor.objects.create(
             user=self.request.user,
             project=project,

@@ -2,7 +2,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Issue
-from .serializers import IssueSerializer
+from .serializers import (
+    IssueListSerializer,
+    IssueDetailSerializer,
+)
+
 from .permissions import IsProjectContributor, IsIssueAuthorOrReadOnly
 
 
@@ -10,7 +14,10 @@ from .permissions import IsProjectContributor, IsIssueAuthorOrReadOnly
 
 
 class IssueViewSet(ModelViewSet):
-    serializer_class = IssueSerializer
+    def get_serializer_class(self):
+        if self.action == "list":
+            return IssueListSerializer
+        return IssueDetailSerializer
 
     permission_classes = [
         IsAuthenticated,
